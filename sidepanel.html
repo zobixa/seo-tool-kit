@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Toolkit by Zobixa AI</title>
+<link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">SEO Toolkit <span>by Zobixa AI</span></div>
+  <button id="readPageBtn" class="btn btn-small" type="button">Read current page</button>
+</header>
+<p id="pageInfo" class="page-info">Reading the current page automatically… If nothing appears, click "Read current page" and allow site access when Chrome asks.</p>
+<div id="pageDataBox" class="page-data" hidden></div>
+
+<!-- STEP 1: tool selector dropdown -->
+<div class="selector">
+  <button id="toolDropdownBtn" class="dropdown-btn" type="button" aria-haspopup="true" aria-expanded="false">
+    <span id="toolDropdownLabel">Select tools</span>
+    <span class="chev">▾</span>
+  </button>
+  <div id="toolDropdownPanel" class="dropdown-panel" hidden>
+    <label class="tool-check"><input type="checkbox" data-tool="og"> Open Graph tags</label>
+    <label class="tool-check"><input type="checkbox" data-tool="robots"> robots.txt</label>
+    <label class="tool-check"><input type="checkbox" data-tool="sitemap"> sitemap.xml</label>
+    <label class="tool-check"><input type="checkbox" data-tool="schema"> Schema (JSON-LD)</label>
+  </div>
+</div>
+
+<!-- ============ OPEN GRAPH ============ -->
+<section id="section-og" class="tool-section" hidden>
+  <h2>Open Graph tags</h2>
+  <label>Title <input id="og-title" type="text" placeholder="Page title"></label>
+  <label>Description <textarea id="og-description" rows="2" placeholder="Page description"></textarea></label>
+  <label>Page URL <input id="og-url" type="url" placeholder="https://example.com/page"></label>
+  <div class="row">
+    <label>Site name <input id="og-sitename" type="text"></label>
+    <label>Type
+      <select id="og-type">
+        <option value="website">website</option>
+        <option value="article">article</option>
+        <option value="product">product</option>
+        <option value="profile">profile</option>
+        <option value="book">book</option>
+      </select>
+    </label>
+  </div>
+  <label>Locale <input id="og-locale" type="text" placeholder="en_US"></label>
+  <label>Image URL <input id="og-image" type="url" placeholder="https://example.com/image.jpg"></label>
+  <label>Pick an image from this page
+    <select id="og-image-select"><option value="">— none found yet —</option></select>
+  </label>
+  <div class="og-img-preview-wrap">
+    <img id="og-image-thumb" class="og-img-thumb" alt="Selected share image preview" referrerpolicy="no-referrer" hidden>
+    <p id="og-image-thumb-note" class="status">No image selected yet — the share preview below will show a placeholder.</p>
+  </div>
+  <label>Image alt text <input id="og-imagealt" type="text"></label>
+
+  <label class="check"><input type="checkbox" id="og-twitter"> Add Twitter Card</label>
+  <div class="sub" id="og-twitter-fields" hidden>
+    <label>Card type
+      <select id="og-twittercard">
+        <option value="summary_large_image">summary_large_image</option>
+        <option value="summary">summary</option>
+      </select>
+    </label>
+    <div class="row">
+      <label>Site @handle <input id="og-twittersite" type="text" placeholder="@yoursite"></label>
+      <label>Creator @handle <input id="og-twittercreator" type="text" placeholder="@author"></label>
+    </div>
+  </div>
+
+  <label class="check"><input type="checkbox" id="og-fbappid-check"> Add Facebook App ID</label>
+  <div class="sub" id="og-fbappid-fields" hidden>
+    <label>fb:app_id <input id="og-fbappid" type="text"></label>
+  </div>
+
+  <label class="check"><input type="checkbox" id="og-article"> Article extras</label>
+  <div class="sub" id="og-article-fields" hidden>
+    <div class="row">
+      <label>Published <input id="og-article-published" type="date"></label>
+      <label>Modified <input id="og-article-modified" type="date"></label>
+    </div>
+    <label>Author URL/name <input id="og-article-author" type="text"></label>
+    <div class="row">
+      <label>Section <input id="og-article-section" type="text"></label>
+      <label>Tags (comma separated) <input id="og-article-tags" type="text"></label>
+    </div>
+  </div>
+
+  <label class="check"><input type="checkbox" id="og-product"> Product extras (type must be "product")</label>
+  <div class="sub" id="og-product-fields" hidden>
+    <div class="row">
+      <label>Price <input id="og-product-price" type="number" step="any"></label>
+      <label>Currency <input id="og-product-currency" type="text" placeholder="USD"></label>
+    </div>
+    <div class="row">
+      <label>Availability
+        <select id="og-product-availability">
+          <option value="in stock">in stock</option>
+          <option value="out of stock">out of stock</option>
+          <option value="preorder">preorder</option>
+        </select>
+      </label>
+      <label>Brand <input id="og-product-brand" type="text"></label>
+    </div>
+    <label>SKU / item ID <input id="og-product-sku" type="text"></label>
+  </div>
+
+  <h3>Live preview — how the public sees it</h3>
+  <p class="status">How your link will look when shared — it updates as you fill the options. Platforms may crop or shorten text slightly.</p>
+  <div id="og-preview" class="og-visual">Fill the options above to see how it will look.</div>
+</section>
+
+<!-- ============ ROBOTS.TXT ============ -->
+<section id="section-robots" class="tool-section" hidden>
+  <h2>robots.txt</h2>
+  <label class="check"><input type="checkbox" id="rb-blockall"> Block ALL crawlers (Disallow: /)</label>
+  <label class="check"><input type="checkbox" id="rb-allowall"> Allow all crawlers</label>
+  <h3>Crawler rules</h3>
+  <div id="rb-rules"></div>
+  <button id="rb-addrule" class="btn btn-small" type="button">+ Add rule</button>
+  <label class="check"><input type="checkbox" id="rb-crawldelay-check"> Add crawl-delay</label>
+  <div class="sub" id="rb-crawldelay-fields" hidden>
+    <label>Delay (seconds) <input id="rb-crawldelay" type="number" min="0" value="10"></label>
+  </div>
+  <label class="check"><input type="checkbox" id="rb-sitemap-check"> Add Sitemap line</label>
+  <div class="sub" id="rb-sitemap-fields" hidden>
+    <label>Sitemap URL <input id="rb-sitemap" type="url" placeholder="https://example.com/sitemap.xml"></label>
+  </div>
+  <button id="rb-load" class="btn btn-small" type="button">Load this site's existing robots.txt</button>
+  <p id="rb-status" class="status"></p>
+</section>
+
+<!-- ============ SITEMAP.XML ============ -->
+<section id="section-sitemap" class="tool-section" hidden>
+  <h2>sitemap.xml</h2>
+  <label>Site base URL <input id="sm-base" type="url" placeholder="https://example.com"></label>
+  <h3>Get URLs from</h3>
+  <label class="check"><input type="checkbox" id="sm-src-crawl"> Crawl this site (follow internal links)</label>
+  <div class="sub" id="sm-crawl-fields" hidden>
+    <div class="row">
+      <label>Depth
+        <select id="sm-depth"><option>1</option><option selected>2</option><option>3</option></select>
+      </label>
+      <label>Max pages
+        <select id="sm-max"><option>50</option><option selected>100</option><option>250</option><option>500</option></select>
+      </label>
+    </div>
+  </div>
+  <label class="check"><input type="checkbox" id="sm-src-import"> Import the site's existing sitemap.xml</label>
+  <label class="check"><input type="checkbox" id="sm-src-manual"> Add URLs manually</label>
+  <div class="sub" id="sm-manual-fields" hidden>
+    <label>URLs (one per line) <textarea id="sm-manual" rows="4" placeholder="https://example.com/about"></textarea></label>
+  </div>
+  <h3>Options</h3>
+  <label class="check"><input type="checkbox" id="sm-opt-lastmod" checked> Include &lt;lastmod&gt; (today's date)</label>
+  <label>Change frequency
+    <select id="sm-opt-changefreq">
+      <option value="">— none —</option>
+      <option value="always">always</option><option value="hourly">hourly</option>
+      <option value="daily">daily</option><option value="weekly" selected>weekly</option>
+      <option value="monthly">monthly</option><option value="yearly">yearly</option><option value="never">never</option>
+    </select>
+  </label>
+  <label>Priority
+    <select id="sm-opt-priority">
+      <option value="">— none —</option>
+      <option value="1.0">Homepage 1.0, other pages 0.8</option>
+      <option value="0.5" selected>All pages 0.5</option>
+      <option value="0.8">All pages 0.8</option>
+    </select>
+  </label>
+  <label class="check"><input type="checkbox" id="sm-opt-images"> Include page images (image sitemap)</label>
+  <label>Exclude URLs containing (one per line) <textarea id="sm-exclude" rows="2" placeholder="/admin/&#10;/cart"></textarea></label>
+  <button id="sm-fetch" class="btn" type="button">Fetch URLs</button>
+  <p id="sm-status" class="status"></p>
+  <div id="sm-urllist-wrap" hidden>
+    <p class="status"><strong id="sm-count">0</strong> URLs — untick any you don't want in the sitemap:</p>
+    <div id="sm-urllist" class="url-list"></div>
+  </div>
+</section>
+
+<!-- ============ SCHEMA ============ -->
+<section id="section-schema" class="tool-section" hidden>
+  <h2>Schema (JSON-LD)</h2>
+  <label>Schema type
+    <select id="sc-type"></select>
+  </label>
+  <div id="sc-form"></div>
+  <div id="sc-repeater"></div>
+  <h3>Live preview — how the public sees it</h3>
+  <div class="preview-head">
+    <span class="status">A visual mock of the rich result this schema can show in Google search. It updates as you fill the options. (Google decides if &amp; when to display it.)</span>
+    <button id="sc-copy-preview" class="btn btn-small" type="button">Copy code</button>
+  </div>
+  <div id="sc-preview" class="schema-visual">Fill the options above to see how it will look.</div>
+  <p id="sc-warnings" class="warnings"></p>
+  <p class="status">Validate the result:
+    <a href="https://search.google.com/test/rich-results" target="_blank" rel="noopener">Google Rich Results Test</a> ·
+    <a href="https://validator.schema.org/" target="_blank" rel="noopener">Schema.org Validator</a>
+  </p>
+</section>
+
+<!-- ============ GENERATE + RESULTS ============ -->
+<div class="generate-bar">
+  <button id="generateBtn" class="btn btn-main" type="button" disabled>Generate selected tools</button>
+  <button id="downloadAllBtn" class="btn" type="button" hidden>Download all</button>
+</div>
+<p id="generateHint" class="status">Tick at least one tool above to generate.</p>
+<div id="results"></div>
+
+<footer class="footer">
+  Runs 100% in your browser — nothing is uploaded anywhere.<br>
+  Made by <a href="https://github.com/zobixa" target="_blank" rel="noopener">Zobixa AI</a>
+</footer>
+
+<script type="module" src="sidepanel.js"></script>
+</body>
+</html>
